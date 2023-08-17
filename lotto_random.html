@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .result > div {
+        display: flex;
+      }
+      .result > div > p {
+        background-color: aqua;
+        margin: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>로또 번호</h1>
+    <input
+      id="select"
+      type="text"
+      placeholder="고정하고 싶은 번호 , 구분해주세요"
+    />
+    <div class="result"></div>
+    <button id="dice">굴리기</button>
+
+    <script>
+      const btn = document.querySelector("#dice");
+      const result = document.querySelector(".result");
+      const select = document.querySelector("#select");
+      //고정하고 싶은 번호를 인풋으로 받아서 배열로 만든 후 lotto배열과 합친다.
+      let lotto = [];
+
+      const pick = () => {
+        if (select.value) {
+          let select_number = select.value.split(",");
+          for (let d = 0; d < select_number.length; d++) {
+            x = select_number[d];
+            x = String(x).padStart(2, "0");
+            lotto.push(x);
+            console.log("lotto", lotto);
+          }
+        }
+
+        while (lotto.length < 6) {
+          let random = Math.floor(Math.random() * 45) + 1;
+          //숫자가 한자리면 앞에 '0' 붙이기 (문자밖에안되나봥)
+          random = String(random).padStart(2, "0");
+
+          if (lotto.indexOf(random) < 0) {
+            //indexOf는 배열안에 해당값이 있으면 인덱스 번호를 리턴한다.
+            //없을 경우 -1을 리턴하기 때문에 0보다 작을경우, 즉 번호가 없을 경우에만 배열
+            lotto.push(random);
+            //배열 숫자 오름차순으로 정렬하기
+            lotto.sort();
+          }
+        }
+        const div = document.createElement("div");
+        result.appendChild(div);
+
+        for (let i = 0; i < 6; i++) {
+          const p = document.createElement("p");
+          div.appendChild(p);
+          p.innerText = lotto[i];
+        }
+
+        const br = document.createElement("br");
+        div.appendChild(br);
+
+        lotto = []; // 번호초기화
+      };
+
+      btn.addEventListener("click", pick);
+    </script>
+  </body>
+</html>
